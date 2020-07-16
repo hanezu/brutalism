@@ -12,7 +12,8 @@ export default {
 	props: {
 		refresh: {
 			// If true, append Refresh Panel option to flyout and context
-			type: Boolean,
+			// Use custom label by setting refresh as a string
+			type: [Boolean, String],
 			default: false
 		},
 		debug: {
@@ -51,14 +52,6 @@ export default {
 			// this.app.menus.flyout
 			realFlyout: {
 				menu: []
-			},
-			refreshItem: {
-				id: "refresh",
-				label: "Refresh panel",
-				enabled: true,
-				checkable: false,
-				checked: false,
-				callback: this.refreshPage
 			},
 			switchThemeItem: {
 				id: "switchTheme",
@@ -107,7 +100,18 @@ export default {
 		// Flyout menu converts to XML from reactive JSON in data() above
 		flyoutMenu() {
 			return this.buildFlyoutMenuInXML();
-		}
+		},
+		refreshItem() {
+			const label = typeof this.refresh === 'string' ? this.refresh: "Refresh panel";
+			return {
+				id: "refresh",
+				label,
+				enabled: true,
+				checkable: false,
+				checked: false,
+				callback: this.refreshPage
+			}
+		},
 	},
 	watch: {
 		// Any updates to menu will trigger CEP to reset it and callback events
